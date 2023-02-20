@@ -26,8 +26,8 @@ function run_setup() {
 	$url = new moodle_url($FULLME);
 	//echo "<pre>"; var_export($url); exit;
 	$hostmatch = $CFG->wwwroot == $url->get_scheme() . '://' . $url->get_host();
-	$dashmatch = str_starts_with($url->get_path(), '/app/dashboard/index.php');
-	$appmatch = str_starts_with($url->get_path(), '/app');
+	$dashmatch = substr( $url->get_path(), 0, 15 ) === '/app/dashboard/';
+	$appmatch  = substr( $url->get_path(), 0, 4 ) === '/app';
 	$nologinajax = $url->get_path() == '/lib/ajax/service-nologin.php';
 
 	// If the user is attempting to access the default dashboard, allow it.
