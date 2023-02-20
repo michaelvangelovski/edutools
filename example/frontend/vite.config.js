@@ -14,23 +14,23 @@
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import liveReload from 'vite-plugin-live-reload'
-import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     liveReload([
-      // edit live reload paths according to your source code
-      __dirname + '/(app|config|views)/**/*.php',
       // using this for our example:
-      __dirname + '/../*.php',
+      __dirname + '../../*.php',
     ]),
     splitVendorChunkPlugin(),
   ],
-  base: '/app/example/',
+  //base: '/app/example/frontend',
+  base: process.env.APP_ENV === 'development'
+  ? '/app/example/frontend/'
+  : '/app/example/frontend/dist',
   build: {
-    outDir: '../',
+    //outDir: '../',
     // emit manifest so PHP can find the hashed files
     manifest: true,
   },
