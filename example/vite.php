@@ -1,38 +1,32 @@
 <?php
-// Helpers here serve as example. Change to suit your needs.
+
 const VITE_HOST = 'http://127.0.0.1:5133';
-const BASE_DIR = '/app/example/';
-
-// For a real-world example check here:
-// https://github.com/wp-bond/bond/blob/master/src/Tooling/Vite.php
-// https://github.com/wp-bond/boilerplate/tree/master/app/themes/boilerplate
-
-// you might check @vitejs/plugin-legacy if you need to support older browsers
-// https://github.com/vitejs/vite/tree/main/packages/plugin-legacy
-
-
+const BASE_DIR = '/app/example';
+const DIST_DIR = '/frontend/dist';
 
 // Prints all the html entries needed for Vite
-
 function vite(string $entry): string
 {
     $vite_host = VITE_HOST;
+    $base_dir = BASE_DIR;
     $output = '';
     if (isDev($entry)) {
         $output .= <<<HTML
             <script type="module">
-                import RefreshRuntime from "{$vite_host}/@react-refresh"
+                import RefreshRuntime from "{$vite_host}{$base_dir}/frontend/@react-refresh"
+                RefreshRuntime.injectIntoGlobalHook(window)
                 window.\$RefreshReg$ = () => {}
                 window.\$RefreshSig$ = () => (type) => type
-                RefreshRuntime.injectIntoGlobalHook(window)
                 window.__vite_plugin_react_preamble_installed__ = true
             </script>
+            <script type="module" src="{$vite_host}{$base_dir}/frontend/@vite/client"></script>
+            <script type="module" src="{$vite_host}{$base_dir}/frontend/src/main.jsx"></script>
         HTML;
+    } else {
+        $output .= "\n" . jsTag($entry)
+        . "\n" . jsPreloadImports($entry)
+        . "\n" . cssTag($entry);
     }
-
-    $output .= "\n" . jsTag($entry)
-    . "\n" . jsPreloadImports($entry)
-    . "\n" . cssTag($entry);
 
     return $output;
 }
@@ -68,7 +62,7 @@ function isDev(string $entry): bool
 function jsTag(string $entry): string
 {
     $url = isDev($entry)
-        ? VITE_HOST . BASE_DIR . 'src/main.jsx'
+        ? VITE_HOST . BASE_DIR . '/frontend/src/main.jsx'
         : assetUrl($entry);
 
     if (!$url) {
@@ -114,7 +108,7 @@ function cssTag(string $entry): string
 // Helpers to locate files
 function getManifest(): array
 {
-    $content = file_get_contents(__DIR__ . '/manifest.json');
+    $content = file_get_contents(__DIR__ . DIST_DIR . '/manifest.json');
     return json_decode($content, true);
 }
 
@@ -123,7 +117,7 @@ function assetUrl(string $entry): string
     $manifest = getManifest();
 
     $url = isset($manifest[$entry])
-        ? BASE_DIR . $manifest[$entry]['file']
+        ? BASE_DIR . DIST_DIR . '/' . $manifest[$entry]['file']
         : '';
         
     //echo "<pre>"; var_export($url); exit;
@@ -137,7 +131,7 @@ function importsUrls(string $entry): array
 
     if (!empty($manifest[$entry]['imports'])) {
         foreach ($manifest[$entry]['imports'] as $imports) {
-            $urls[] = BASE_DIR . $manifest[$imports]['file'];
+            $urls[] = BASE_DIR . DIST_DIR . '/' . $manifest[$imports]['file'];
         }
     }
     return $urls;
@@ -150,7 +144,7 @@ function cssUrls(string $entry): array
 
     if (!empty($manifest[$entry]['css'])) {
         foreach ($manifest[$entry]['css'] as $file) {
-            $urls[] = BASE_DIR . $file;
+            $urls[] = BASE_DIR . DIST_DIR . '/' . $file;
         }
     }
     return $urls;

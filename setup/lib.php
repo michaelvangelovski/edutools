@@ -28,16 +28,18 @@ function run_setup() {
 	$hostmatch = $CFG->wwwroot == $url->get_scheme() . '://' . $url->get_host();
 	$dashmatch = substr( $url->get_path(), 0, 15 ) === '/app/dashboard/';
 	$appmatch  = substr( $url->get_path(), 0, 4 ) === '/app';
+	$loginmatch  = substr( $url->get_path(), 0, 6 ) === '/login';
 	$nologinajax = $url->get_path() == '/lib/ajax/service-nologin.php';
 
 	// If the user is attempting to access the default dashboard, allow it.
-	if ( $hostmatch && ( $dashmatch || $nologinajax ) ) {
+	if ( $hostmatch && ( $dashmatch || $loginmatch || $nologinajax ) ) {
 		return;
 	}
 
-	// If user is not logged in, redirect them to the dash, this will trigger auth flow.
+	// If user is not logged in, trigger auth flow.
 	if (!isloggedin()) {
-		redirect_to_dashboard();
+        require_login();
+		//redirect_to_dashboard();
 	}
 
 	// If user is accessing a front end system, allow it.
