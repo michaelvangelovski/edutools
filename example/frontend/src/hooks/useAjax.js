@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import config from "./config";
+import useConfig from "./useConfig";
 
 const queryString = params =>
   Object.keys(params)
@@ -7,7 +7,7 @@ const queryString = params =>
     .join("&")
 
 const createUrl = (url, queryOptions) => {
-  queryOptions.sesskey = config.sesskey
+  queryOptions.sesskey = useConfig().sesskey
   return url + "?" + queryString(queryOptions)
 }
 
