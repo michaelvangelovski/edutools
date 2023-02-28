@@ -5,7 +5,9 @@ export default () => {
   return (
     <Fragment>
       <div>
-        List
+        <h1 className="text-3xl font-bold underline">
+          List
+        </h1>
         <FormControl>
           <FormControl.Label id="autocompleteLabel-basic">Pick a branch</FormControl.Label>
           <Autocomplete>
