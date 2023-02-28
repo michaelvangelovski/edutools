@@ -3,6 +3,8 @@
 require(__DIR__.'/../../config.php');
 require_once __DIR__ . '/vite.php';
 
+//echo "<pre>"; var_export($_SERVER['REQUEST_URI']); exit;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

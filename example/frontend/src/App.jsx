@@ -1,49 +1,37 @@
-import { useState } from 'react'
-import useAjax from "./hooks/useAjax"
+import { Router, Route, Switch, useLocation } from "wouter";
+import {ThemeProvider, BaseStyles} from '@primer/react'
+
+import Form from "./pages/Form/index.jsx";
+import List from "./pages/List/index.jsx";
+
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [location] = useLocation();
 
-  const { response, error, loading } = useAjax(
-   "https://www.anapioficeandfire.com/api/houses",
-   {
-     query: {
-       page: 1,
-       pageSize: 10,
-     },
-   }
-  );
-  console.log(response);
-  if (loading) {
-   return <div className="loading">Loading...</div>
-  } 
-  if (error) {
-   return <div className="error">{JSON.stringify(error)}</div>
-  }
+  console.log(location);
 
   return (
-    <div className="App">
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-      <div>
-        {response.map((item, index) => {
-          return (
-            <ul className="datapoint" key={index}>
-              <li>{item.name}</li>
-            </ul>
-          );
-        })}
-      </div>
-    </div>
-  )
-
-
-
-  
+    <main>
+      <ThemeProvider>
+        <BaseStyles>
+            <Router base="/app/example">
+              <Switch>
+                <Route path="/">
+                  <List />
+                </Route>
+                <Route path="/form">
+                  <Form />
+                </Route>
+                <Route>
+                  404, Not Found!
+                </Route>
+              </Switch>
+            </Router>
+        </BaseStyles>
+      </ThemeProvider>
+    </main>
+  );
 }
 
 export default App
