@@ -76,3 +76,62 @@ function redirect_to_dashboard() {
     redirect($dashboardurl->out());
     exit;
 }
+
+function call_service_function($function, $args, $ajaxonly=false) {
+    $response = array();
+
+    try {
+        $externalfunctioninfo = service_function_info($function);
+        var_export($externalfunctioninfo);
+
+        //$result = call_user_func($callable, $externalfunctioninfo->returns_desc, $result);
+
+        //$response['error'] = false;
+        //$response['data'] = $result;
+    } catch (Exception $e) {
+        $exception = get_exception_info($e);
+        unset($exception->a);
+        $exception->backtrace = format_backtrace($exception->backtrace, true);
+        if (!debugging('', DEBUG_DEVELOPER)) {
+            unset($exception->debuginfo);
+            unset($exception->backtrace);
+        }
+        $response['error'] = true;
+        $response['exception'] = $exception;
+    }
+
+    return $response;
+}
+
+/**
+ * Returns detailed function information
+ *
+ * @param string|object $function name of external function or record from external_function
+ * @param int $strictness IGNORE_MISSING means compatible mode, false returned if record not found, debug message if more found;
+ *                        MUST_EXIST means throw exception if no record or multiple records found
+ * @return stdClass description or false if not found or exception thrown
+ */
+function service_function_info($function, $strictness=MUST_EXIST) {
+    global $CFG;
+
+    $namespacefunc = explode("-", $function); // E.g. app_example, test_service
+    $pathclass = explode("_", $namespacefunc[0]); // E.g. app, example
+
+    $function = new stdClass();
+    $function->namespace = $namespacefunc[0];
+    $function->classname = '\API';
+    $function->methodname = $namespacefunc[1];
+    $function->classpath = $CFG->dirroot.'/'.$pathclass[0].'/'.$pathclass[1].'/backend/api.php';
+
+    if (!file_exists($function->classpath)) {
+        throw new coding_exception('Cannot find file with service function implementation '.$function->classpath);
+    }
+
+    require_once($function->classpath);
+
+    if (!method_exists($function->namespace.$function->classname, $function->methodname)) {
+        throw new coding_exception('Missing implementation method of '.$function->namespace.$function->classname.'::'.$function->methodname);
+    }
+
+    return $function;
+}

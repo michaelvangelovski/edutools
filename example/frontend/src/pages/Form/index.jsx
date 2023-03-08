@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { TextInput, Checkbox, Button, Group, Box, LoadingOverlay } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Link } from "wouter"
@@ -23,12 +23,13 @@ export default () => {
   // Form submit.
   const handleSubmit = (values) => {
     ajax(
-      "https://www.anapioficeandfire.com/api/houses",
       {
-        query: {
-          page: 1,
-          pageSize: 10,
-        },
+        method: "POST", 
+        body: {
+          methodname: 'app_example-test_service',
+          args: values,
+        }
+        /*query: { page: 1, pageSize: 10 },*/
       }
     )
   }

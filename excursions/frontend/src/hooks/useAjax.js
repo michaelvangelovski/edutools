@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react"
-import useConfig from "./useConfig";
+import { useState } from "react"
+
+
+const getConfig = () => {
+  return window.appdata.config
+};
 
 const queryString = params =>
   Object.keys(params)
@@ -7,26 +11,28 @@ const queryString = params =>
     .join("&")
 
 const createUrl = (url, queryOptions) => {
-  queryOptions.sesskey = useConfig().sesskey
+  queryOptions.sesskey = getConfig().sesskey
   return url + "?" + queryString(queryOptions)
 }
 
-export default (url, options = { method: "GET", body: {}, query: {} }) => {
+
+const useAjax = () => {
   const [data, setData] = useState({
     response: null,
     error: false,
-    loading: true,
+    loading: false,
   })
 
-  useEffect(() => {
-    setData({ ...data, error: null, loading: true })
-    fetch(createUrl(url, options.query), {
-      method: options.method || "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: options.method !== "GET" && JSON.stringify(options.body),
-    })
+  const ajax = (url = "", options = { method: "GET", body: {}, query: {} }) => {
+    if (url) {
+      setData({ response: null, error: null, loading: true })
+      fetch(createUrl(url, options.query), {
+        method: options.method || "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: options.method !== "GET" && JSON.stringify(options.body),
+      })
       .then(async response => {
         const data = await response.json()
         setData({
@@ -36,14 +42,16 @@ export default (url, options = { method: "GET", body: {}, query: {} }) => {
         })
       })
       .catch(error => {
-        //fetch throws an error only on network failure or if anything prevented the request from completing
         setData({
-          response: { status: "network_failure" },
+          response: error,
           error: true,
           loading: false,
         })
       })
-  }, [url, JSON.stringify(options)])
+    }
+  }
 
-  return data
+  return [ data.response, data.error, data.loading, ajax ];
 }
+
+export default useAjax;

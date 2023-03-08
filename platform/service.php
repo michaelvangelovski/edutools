@@ -21,13 +21,18 @@ if ($request === null) {
     throw new coding_exception('Invalid json in request: ' . $lasterror);
 }
 
-echo "<pre>"; var_export($request); exit;
-
 $haserror = false;
 $response = array();
 $methodname = clean_param($request['methodname'], PARAM_ALPHANUMEXT);
 $args = $request['args'];
+
 $response = call_service_function($methodname, $args, true);
+
+var_export($response); 
+exit;
+
+
+
 if ($response['error']) {
     $haserror = true;
 }

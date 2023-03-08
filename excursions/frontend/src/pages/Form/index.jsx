@@ -1,9 +1,14 @@
 import { Fragment } from "react";
-import { TextInput, Checkbox, Button, Group, Box } from '@mantine/core';
+import { TextInput, Checkbox, Button, Group, Box, LoadingOverlay } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { Link } from "wouter"
+import useAjax from '../../hooks/useAjax';
 
 export default () => {
+  
+  const [response, error, loading, ajax] = useAjax(); // <-- destructure state and fetch function
 
+  // Form setup.
   const form = useForm({
     initialValues: {
       email: '',
@@ -15,37 +20,74 @@ export default () => {
     },
   });
 
+  // Form submit.
+  const handleSubmit = (values) => {
+    ajax(
+      "https://www.anapioficeandfire.com/api/houses",
+      {
+        query: {
+          page: 1,
+          pageSize: 10,
+        },
+      }
+    )
+  }
+
+  if (response) {
+    return (
+      <p>There was a response. Possibly redirect?</p>
+    )
+  }
+
   return (
     <Fragment>
-      <div>
+
         <h1 className="text-3xl font-bold underline">Form</h1>
 
+        <div style={{position: 'relative' }}>
 
+          <LoadingOverlay visible={loading} overlayBlur={2} />
 
-        <Box sx={{ maxWidth: 300 }} mx="auto">
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            <TextInput
-              withAsterisk
-              label="Email"
-              placeholder="your@email.com"
-              {...form.getInputProps('email')}
-            />
+          <Box sx={{ maxWidth: 300 }} mx="auto">
 
-            <Checkbox
-              mt="md"
-              label="I agree to sell my privacy"
-              {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-            />
+            <form onSubmit={form.onSubmit(handleSubmit)}>
 
-            <Group position="right" mt="md">
-              <Button type="submit">Submit</Button>
-            </Group>
-          </form>
-        </Box>
+              <TextInput
+                withAsterisk
+                label="Email"
+                placeholder="your@email.com"
+                {...form.getInputProps('email')}
+              />
 
+              <Checkbox
+                mt="md"
+                label="I agree to sell my privacy"
+                {...form.getInputProps('termsOfService', { type: 'checkbox' })}
+              />
 
+              <Group position="right" mt="md">
+                <Link href="/">
+                  <Button>List</Button>
+                </Link>
+                <Button type="submit">Submit</Button>
+              </Group>
+              
+              {error &&
+                <div> There was an error... </div>
+              }
 
-      </div>
+            </form>
+
+          </Box>
+
+          <ul>
+            {response && response.map((item) => (
+              <li>{item.name}</li>
+            ))}
+          </ul>
+
+        </div>
+
     </Fragment>
   );
 };

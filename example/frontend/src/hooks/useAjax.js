@@ -5,16 +5,17 @@ const getConfig = () => {
   return window.appdata.config
 };
 
-const queryString = params =>
-  Object.keys(params)
+const queryString = (params) => {
+  return Object.keys(params)
     .map(key => `${key}=${params[key]}`)
     .join("&")
+}
 
 const createUrl = (url, queryOptions) => {
+  queryOptions = queryOptions || {}
   queryOptions.sesskey = getConfig().sesskey
   return url + "?" + queryString(queryOptions)
 }
-
 
 const useAjax = () => {
   const [data, setData] = useState({
@@ -23,8 +24,9 @@ const useAjax = () => {
     loading: false,
   })
 
-  const ajax = (url = "", options = { method: "GET", body: {}, query: {} }) => {
-    if (url) {
+  const ajax = (options = { method: "GET", body: {}, query: {} }, url = "/app/platform/service.php") => {
+    if (options.query || options.body) {
+      console.log("Running ajax")
       setData({ response: null, error: null, loading: true })
       fetch(createUrl(url, options.query), {
         method: options.method || "GET",
