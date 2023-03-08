@@ -1,5 +1,5 @@
 // View your website at your own local server
-// for example http://vite-php-setup.test
+// for excursions http://vite-php-setup.test
 
 // http://localhost:5133 is serving Vite on development
 // but accessing it directly will be empty
@@ -20,13 +20,15 @@ export default defineConfig({
   plugins: [
     react(),
     liveReload([
+      // using this for our excursions:
       __dirname + '../../*.php',
     ]),
     splitVendorChunkPlugin(),
   ],
+  //base: '/app/excursions/frontend',
   base: process.env.APP_ENV === 'development'
-  ? '/app/example/frontend/'
-  : '/app/example/frontend/dist',
+  ? '/app/excursions/frontend/'
+  : '/app/excursions/frontend/dist',
   build: {
     //outDir: '../',
     // emit manifest so PHP can find the hashed files

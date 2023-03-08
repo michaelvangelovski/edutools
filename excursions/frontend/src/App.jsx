@@ -8,11 +8,11 @@ import './App.css'
 function App() {
   const [location] = useLocation();
 
-  console.log(location)
+  console.log(location);
 
   return (
     <main>
-            <Router base="/app/example">
+            <Router base="/app/excursions">
               <Switch>
                 <Route path="/">
                   <List />

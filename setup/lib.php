@@ -30,9 +30,10 @@ function run_setup() {
 	$appmatch  = substr( $url->get_path(), 0, 4 ) === '/app';
 	$loginmatch  = substr( $url->get_path(), 0, 6 ) === '/login';
 	$nologinajax = $url->get_path() == '/lib/ajax/service-nologin.php';
+	$platformservice = $url->get_path() == '/app/setup/service.php';
 
 	// If the user is attempting to access the default dashboard, allow it.
-	if ( $hostmatch && ( $dashmatch || $loginmatch || $nologinajax ) ) {
+	if ( $hostmatch && ( $dashmatch || $loginmatch || $nologinajax || $platformservice ) ) {
 		return;
 	}
 

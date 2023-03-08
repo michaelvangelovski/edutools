@@ -1,7 +1,7 @@
 <?php
 
-const VITE_HOST = 'http://localhost:5133';
-const BASE_DIR = '/app/example';
+const VITE_HOST = 'http://127.0.0.1:5133';
+const BASE_DIR = '/app/excursions';
 const DIST_DIR = '/frontend/dist';
 
 // Prints all the html entries needed for Vite
