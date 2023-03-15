@@ -28,11 +28,6 @@ $args = $request['args'];
 
 $response = call_service_function($methodname, $args, true);
 
-var_export($response); 
-exit;
-
-
-
 if ($response['error']) {
     $haserror = true;
 }

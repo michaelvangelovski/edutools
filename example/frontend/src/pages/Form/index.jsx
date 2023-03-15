@@ -6,7 +6,7 @@ import useAjax from '../../hooks/useAjax';
 
 export default () => {
   
-  const [response, error, loading, ajax] = useAjax(); // <-- destructure state and fetch function
+  const [submit, error, loading, ajax] = useAjax(); // <-- destructure state and fetch function
 
   // Form setup.
   const form = useForm({
@@ -34,10 +34,22 @@ export default () => {
     )
   }
 
-  if (response) {
-    return (
-      <p>There was a response. Possibly redirect?</p>
-    )
+  if (submit) {
+    if (submit.error) {
+      return (
+        <Fragment>
+          <p>There was a server side error:</p>
+          <p>{submit.exception.message}</p>
+        </Fragment>
+      )
+    } else {
+      return (
+        <Fragment>
+          <p>API call success:</p>
+          <p>{submit.data}</p>
+        </Fragment>
+      )
+    }
   }
 
   return (
@@ -80,12 +92,6 @@ export default () => {
             </form>
 
           </Box>
-
-          <ul>
-            {response && response.map((item) => (
-              <li>{item.name}</li>
-            ))}
-          </ul>
 
         </div>
 

@@ -81,13 +81,14 @@ function call_service_function($function, $args, $ajaxonly=false) {
     $response = array();
 
     try {
-        $externalfunctioninfo = service_function_info($function);
-        var_export($externalfunctioninfo);
+        $function = service_function_info($function);
+        //var_export($function);
 
-        //$result = call_user_func($callable, $externalfunctioninfo->returns_desc, $result);
+        require_once($function->classpath);
+        $result = call_user_func($function->nameclass .'::'.$function->methodname);
 
-        //$response['error'] = false;
-        //$response['data'] = $result;
+        $response['error'] = false;
+        $response['data'] = $result;
     } catch (Exception $e) {
         $exception = get_exception_info($e);
         unset($exception->a);
@@ -119,9 +120,10 @@ function service_function_info($function, $strictness=MUST_EXIST) {
 
     $function = new stdClass();
     $function->namespace = $namespacefunc[0];
-    $function->classname = '\API';
+    $function->classname = 'API';
+    $function->nameclass = $function->namespace.'\\'.$function->classname;
     $function->methodname = $namespacefunc[1];
-    $function->classpath = $CFG->dirroot.'/'.$pathclass[0].'/'.$pathclass[1].'/backend/api.php';
+    $function->classpath = $CFG->dirroot.'\\'.$pathclass[0].'\\'.$pathclass[1].'\\backend\\api.php';
 
     if (!file_exists($function->classpath)) {
         throw new coding_exception('Cannot find file with service function implementation '.$function->classpath);
@@ -129,8 +131,8 @@ function service_function_info($function, $strictness=MUST_EXIST) {
 
     require_once($function->classpath);
 
-    if (!method_exists($function->namespace.$function->classname, $function->methodname)) {
-        throw new coding_exception('Missing implementation method of '.$function->namespace.$function->classname.'::'.$function->methodname);
+    if (!method_exists($function->nameclass, $function->methodname)) {
+        throw new coding_exception('Missing implementation method of '.$function->nameclass.'::'.$function->methodname);
     }
 
     return $function;
