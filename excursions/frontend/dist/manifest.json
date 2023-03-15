@@ -1,0 +1,20 @@
+{
+  "_vendor-84e8b10c.js": {
+    "file": "assets/vendor-84e8b10c.js"
+  },
+  "index.css": {
+    "file": "assets/index-179954eb.css",
+    "src": "index.css"
+  },
+  "index.html": {
+    "css": [
+      "assets/index-179954eb.css"
+    ],
+    "file": "assets/index-c9937eae.js",
+    "imports": [
+      "_vendor-84e8b10c.js"
+    ],
+    "isEntry": true,
+    "src": "index.html"
+  }
+}
