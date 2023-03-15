@@ -16,7 +16,7 @@ The core:
 - rm -rf * #Remove all existing contents from local dir
 - git clone git@github.com:michaelvangelovski/edutools.git .
 - Run the installation of the plugins via the browser
-- Open <moodle_root_dir>/config.php and add the following line to the bottom: require_once(__DIR__. '/app/platform/setup.php');
+- Open <moodle_root_dir>/config.php and add the following line to the bottom: require_once(__DIR__. '/local/platform/setup.php');
 
 Access the example tool:
 - Access the example tool: <site_url>/local/example

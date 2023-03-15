@@ -1,3 +1,3 @@
 <?php
 
-$string['pluginname'] = 'Setup';
+$string['pluginname'] = 'Platform';
