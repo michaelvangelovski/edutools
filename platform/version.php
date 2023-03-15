@@ -17,7 +17,7 @@
 /**
  * Loans
  *
- * @package   local_setup
+ * @package   local_platform
  * @copyright 2023 Michael Vangelovski
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
@@ -27,5 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2023013106;
 $plugin->requires  = 2017111300;
-$plugin->component = 'local_setup';
+$plugin->component = 'local_platform';
 $plugin->maturity = MATURITY_STABLE;
