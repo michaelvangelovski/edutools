@@ -39,7 +39,7 @@ const useAjax = () => {
         const data = await response.json()
         setData({
           response: data,
-          error: !response.ok,
+          error: response.error,
           loading: false,
         })
       })
