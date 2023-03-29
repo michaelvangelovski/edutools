@@ -1,31 +1,32 @@
-import { Router, Route, Switch, useLocation } from "wouter";
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Form from "./pages/Form/index.jsx";
 import List from "./pages/List/index.jsx";
 
+import "inter-ui/inter.css";
 import './App.css'
 
 function App() {
-  const [location] = useLocation();
 
-  console.log(location)
+  const router = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: <List />
+      },
+      {
+        path: "form",
+        element: <Form />,
+      },
+    ],
+    {
+      basename: "/app/excursions"
+    }
+  );
 
   return (
-    <main>
-            <Router base="/app/example">
-              <Switch>
-                <Route path="/">
-                  <List />
-                </Route>
-                <Route path="/form">
-                  <Form />
-                </Route>
-                <Route>
-                  404, Not Found!
-                </Route>
-              </Switch>
-            </Router>
-    </main>
+    <div className="page">
+      <RouterProvider router={router} />
+    </div>
   );
 }
 

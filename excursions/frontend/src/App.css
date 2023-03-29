@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body { 
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; 
+}
+@supports (font-variation-settings: normal) {
+  body { 
+    font-family: 'Inter var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; 
+    font-feature-settings: "cv03", "cv04", "cv11";
+  }
+}
+
+body {
+  background-color: #f1f5f9;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4285714286;
+  color: #1d273b;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+.page-header {
+  margin: 1.25rem 0 0;
+}
+.page-pretitle {
+  font-size: .625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  line-height: 1rem;
+  color: #616876;
+}
+.page-title {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+table thead th {
+  background: #f8fafc;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  line-height: 1rem;
+  color: #616876;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  white-space: nowrap;
+}
+.td-truncate {
+  width: 1px;
+}
