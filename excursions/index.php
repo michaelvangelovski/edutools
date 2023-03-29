@@ -11,7 +11,7 @@ require_once __DIR__ . '/vite.php';
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>excursions</title>
+        <title>Excursions</title>
         <script>
             window.appdata = {}
             window.appdata.config = {

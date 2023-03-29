@@ -4,6 +4,7 @@ require(__DIR__.'/../../config.php');
 require_once __DIR__ . '/vite.php';
 
 //echo "<pre>"; var_export($_SERVER['REQUEST_URI']); exit;
+$pluginconfig = get_config('local_example');
 
 ?>
 <!DOCTYPE html>
@@ -15,10 +16,11 @@ require_once __DIR__ . '/vite.php';
         <script>
             window.appdata = {}
             window.appdata.config = {
-                "sesskey": "<?= sesskey() ?>"
+                "sesskey": "<?= sesskey() ?>",
+                "pluginversion": "<?= $pluginconfig->version ?>"
             }
         </script>
-
+        
         <?= vite('index.html') ?>
         
     </head>
